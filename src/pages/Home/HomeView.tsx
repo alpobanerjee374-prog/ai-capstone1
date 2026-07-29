@@ -1,9 +1,9 @@
 import { useHomeViewModel } from './useHomeViewModel'
 
 const HomeView = () => {
-  const model = useHomeViewModel()
+  useHomeViewModel()
 
-  return <div>{model.title}</div>
+  return <div>Home view ready</div>
 }
 
 export default HomeView
