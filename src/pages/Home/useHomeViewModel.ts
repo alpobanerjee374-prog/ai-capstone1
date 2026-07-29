@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { Movie } from '../../types/movie'
-import { getMovies } from './HomeModel'
+import { getMovies, initialMovies } from './HomeModel'
 
 export interface HomeViewModel {
   query: string
@@ -16,6 +16,26 @@ export const useHomeViewModel = (): HomeViewModel => {
   const [movies, setMovies] = useState<Movie[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const loadInitialMovies = async () => {
+      setLoading(true)
+      setError(null)
+
+      try {
+        const results = await initialMovies()
+        setMovies(results)
+      } catch (err) {
+        const message = err instanceof Error ? err.message : 'Unable to load movies.'
+        setError(message)
+        setMovies([])
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    void loadInitialMovies()
+  }, [])
 
   const handleSearch = async () => {
     setLoading(true)
