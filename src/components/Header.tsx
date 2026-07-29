@@ -1,7 +1,15 @@
 import './Header.css'
 import { Link } from 'react-router-dom'
+import { useHomeContext } from '../context/HomeContext'
 
 const Header = () => {
+  const { query, setQuery, handleSearch } = useHomeContext()
+
+  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    void handleSearch()
+  }
+
   return (
     <header className="header">
       <div className="header__inner">
@@ -17,8 +25,14 @@ const Header = () => {
           </nav>
         </div>
 
-        <form className="header__form">
-          <input className="header__input" type="text" placeholder="Search movies" />
+        <form className="header__form" onSubmit={onSubmit}>
+          <input
+            className="header__input"
+            type="text"
+            placeholder="Search movies"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+          />
           <button className="header__button" type="submit">
             Search
           </button>

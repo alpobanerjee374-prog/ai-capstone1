@@ -1,9 +1,9 @@
 import './HomeView.css'
 import MovieCard from '../../components/MovieCard/MovieCard'
-import { useHomeViewModel } from './useHomeViewModel'
+import { useHomeContext } from '../../context/HomeContext'
 
 const HomeView = () => {
-  const { movies, loading, error } = useHomeViewModel()
+  const { movies, loading, error } = useHomeContext()
 
   return (
     <section className="home-view">

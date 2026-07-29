@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { Movie } from '../../types/movie'
-import { getMovies, initialMovies } from './HomeModel'
+import { getMovies, initialMovies as loadInitialMoviesFromModel } from './HomeModel'
 
 export interface HomeViewModel {
   query: string
@@ -9,6 +9,7 @@ export interface HomeViewModel {
   loading: boolean
   error: string | null
   handleSearch: () => Promise<void>
+  initialMovies: () => Promise<Movie[]>
 }
 
 export const useHomeViewModel = (): HomeViewModel => {
@@ -16,33 +17,55 @@ export const useHomeViewModel = (): HomeViewModel => {
   const [movies, setMovies] = useState<Movie[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const hasLoadedInitialMovies = useRef(false)
+  const previousQuery = useRef('')
 
-  useEffect(() => {
-    const loadInitialMovies = async () => {
-      setLoading(true)
-      setError(null)
-
-      try {
-        const results = await initialMovies()
-        setMovies(results)
-      } catch (err) {
-        const message = err instanceof Error ? err.message : 'Unable to load movies.'
-        setError(message)
-        setMovies([])
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    void loadInitialMovies()
-  }, [])
-
-  const handleSearch = async () => {
+  const initialMovies = async (): Promise<Movie[]> => {
     setLoading(true)
     setError(null)
 
     try {
-      const results = await getMovies(query)
+      const results = await loadInitialMoviesFromModel()
+      setMovies(results)
+      return results
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Unable to load movies.'
+      setError(message)
+      setMovies([])
+      return []
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    if (!hasLoadedInitialMovies.current) {
+      hasLoadedInitialMovies.current = true
+      void initialMovies()
+      previousQuery.current = query
+      return
+    }
+
+    if (query.trim() === '' && previousQuery.current.trim() !== '') {
+      void initialMovies()
+    }
+
+    previousQuery.current = query
+  }, [query])
+
+  const handleSearch = async () => {
+    const trimmedQuery = query.trim()
+
+    if (!trimmedQuery) {
+      await initialMovies()
+      return
+    }
+
+    setLoading(true)
+    setError(null)
+
+    try {
+      const results = await getMovies(trimmedQuery)
       setMovies(results)
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Unable to load movies.'
@@ -60,5 +83,6 @@ export const useHomeViewModel = (): HomeViewModel => {
     loading,
     error,
     handleSearch,
+    initialMovies,
   }
 }
