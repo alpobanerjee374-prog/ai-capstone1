@@ -1,5 +1,5 @@
-import MovieCard from '../components/MovieCard/MovieCard'
-import { useFavouritesViewModel } from './Favourites/useFavouritesViewModel'
+import MovieCard from '../../components/MovieCard/MovieCard'
+import { useFavouritesViewModel } from './useFavouritesViewModel'
 
 const Favorites = () => {
   const { favourites, loading, error, removeMovie } = useFavouritesViewModel()

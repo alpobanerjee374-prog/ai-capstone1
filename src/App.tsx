@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Header from './components/Header'
 import { HomeProvider } from './context/HomeContext'
 import HomeView from './pages/Home/HomeView'
-import Favorites from './pages/Favorites'
+import FavouritesView from './pages/Favourites/FavouritesView'
 import './App.css'
 
 function App() {
@@ -12,7 +12,7 @@ function App() {
         <Header />
         <Routes>
           <Route path="/" element={<HomeView />} />
-          <Route path="/favourites" element={<Favorites />} />
+          <Route path="/favourites" element={<FavouritesView />} />
         </Routes>
       </BrowserRouter>
     </HomeProvider>
