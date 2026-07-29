@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react'
+import './MovieCard.css'
 import type { Movie } from '../../types/movie'
 
 interface MovieCardProps {
@@ -5,19 +7,39 @@ interface MovieCardProps {
 }
 
 const MovieCard = ({ movie }: MovieCardProps) => {
-  return (
-    <article style={{ border: '1px solid #ddd', padding: '1rem', borderRadius: '8px' }}>
-      <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
-        {movie.poster && movie.poster !== 'N/A' ? (
-          <img src={movie.poster} alt={movie.title} style={{ width: 80, height: 120, objectFit: 'cover' }} />
-        ) : null}
+  const hasPoster = Boolean(movie.poster && movie.poster !== 'N/A')
+  const [showPosterFallback, setShowPosterFallback] = useState(false)
 
-        <div style={{ flex: 1 }}>
-          <h3>{movie.title}</h3>
-          <p>Year: {movie.year ?? 'N/A'}</p>
-          <p>Type: {movie.type ?? 'N/A'}</p>
-          <button type="button">Favourite</button>
+  useEffect(() => {
+    setShowPosterFallback(false)
+  }, [movie.poster])
+
+  const shouldShowPoster = hasPoster && !showPosterFallback
+
+  return (
+    <article className="movie-card">
+      {shouldShowPoster ? (
+        <img
+          className="movie-card__poster"
+          src={movie.poster}
+          alt={movie.title}
+          onError={() => {
+            setShowPosterFallback(true)
+          }}
+        />
+      ) : (
+        <div className="movie-card__poster movie-card__poster--placeholder">
+          <span>No Poster</span>
         </div>
+      )}
+
+      <div className="movie-card__content">
+        <h3 className="movie-card__title">{movie.title}</h3>
+        <p className="movie-card__meta">Year: {movie.year ?? 'N/A'}</p>
+        <p className="movie-card__meta">Type: {movie.type ?? 'N/A'}</p>
+        <button className="movie-card__button" type="button">
+          Favourite
+        </button>
       </div>
     </article>
   )

@@ -1,0 +1,26 @@
+.home-view {
+  padding: 1rem 2rem 2rem;
+}
+
+.home-view__title {
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.home-view__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 220px));
+  justify-content: center;
+  gap: 20px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.home-view__item {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
