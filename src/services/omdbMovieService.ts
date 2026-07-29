@@ -18,6 +18,9 @@ function mapOmdbMovie(movie: NonNullable<OmdbSearchResponse['Search']>[number]):
     id: Number.isNaN(id) ? 0 : id,
     title: movie.Title,
     overview: undefined,
+    year: movie.Year,
+    type: movie.Type,
+    poster: movie.Poster,
   }
 }
 

@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Header from './components/Header'
-import Home from './pages/Home'
+import HomeView from './pages/Home/HomeView'
 import Favorites from './pages/Favorites'
 import './App.css'
 
@@ -9,7 +9,7 @@ function App() {
     <BrowserRouter>
       <Header />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<HomeView />} />
         <Route path="/favourites" element={<Favorites />} />
       </Routes>
     </BrowserRouter>

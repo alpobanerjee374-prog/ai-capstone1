@@ -2,6 +2,9 @@ export interface Movie {
   id: number
   title: string
   overview?: string
+  year?: string
+  type?: string
+  poster?: string
 }
 
 export interface OmdbSearchResponse {
