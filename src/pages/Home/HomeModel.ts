@@ -1,5 +1,6 @@
 import type { Movie } from '../../types/movie'
 import { searchMovies } from '../../services/omdbMovieService'
+import { saveFavourite } from '../Favourites/FavouritesModel'
 
 const SEED_KEYWORDS = [
   'Batman',
@@ -69,9 +70,16 @@ export async function getMovies(query: string): Promise<Movie[]> {
   return searchMovies(cleanedQuery)
 }
 
+export async function saveMovie(movie: Movie): Promise<void> {
+  await saveFavourite(movie)
+}
+
 export async function initialMovies(): Promise<Movie[]> {
   const keywords = getRandomKeywords()
-  const movieResults = await Promise.all(keywords.map((keyword) => searchMovies(keyword)))
+  const movieResults = await Promise.all(
+    keywords.map((keyword) => searchMovies(keyword))
+  )
+
   const combinedMovies = movieResults.flat()
   const uniqueMovies = deduplicateMovies(combinedMovies)
   const shuffledMovies = shuffleMovies(uniqueMovies)

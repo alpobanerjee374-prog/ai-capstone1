@@ -3,7 +3,12 @@ import MovieCard from '../../components/MovieCard/MovieCard'
 import { useHomeContext } from '../../context/HomeContext'
 
 const HomeView = () => {
-  const { movies, loading, error } = useHomeContext()
+  const {
+  movies,
+  loading,
+  error,
+  saveMovieAsFavourite,
+} = useHomeContext()
 
   return (
     <section className="home-view">
@@ -15,7 +20,10 @@ const HomeView = () => {
       <ul className="home-view__list">
         {movies.map((movie) => (
           <li key={movie.id} className="home-view__item">
-            <MovieCard movie={movie} />
+           <MovieCard
+  movie={movie}
+  onFavourite={saveMovieAsFavourite}
+/>
           </li>
         ))}
       </ul>

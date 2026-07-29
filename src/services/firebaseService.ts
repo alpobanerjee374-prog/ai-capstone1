@@ -19,9 +19,18 @@ const favouritesCollection = collection(db, 'favourites')
 async function addFavourite(movie: Movie): Promise<void> {
   try {
     const documentRef = doc(db, 'favourites', movie.imdbID)
-    await setDoc(documentRef, movie)
+
+    const movieData = Object.fromEntries(
+      Object.entries(movie).filter(([, value]) => value !== undefined)
+    )
+
+    await setDoc(documentRef, movieData)
   } catch (error) {
-    throw new Error(`Unable to add favourite movie: ${error instanceof Error ? error.message : 'Unknown error'}`)
+    throw new Error(
+      `Unable to add favourite movie: ${
+        error instanceof Error ? error.message : 'Unknown error'
+      }`
+    )
   }
 }
 

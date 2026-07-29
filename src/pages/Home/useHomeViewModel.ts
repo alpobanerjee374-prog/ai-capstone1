@@ -1,6 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import type { Movie } from '../../types/movie'
-import { getMovies, initialMovies as loadInitialMoviesFromModel } from './HomeModel'
+import {
+  getMovies,
+  initialMovies as loadInitialMoviesFromModel,
+  saveMovie,
+} from './HomeModel'
 
 export interface HomeViewModel {
   query: string
@@ -10,6 +14,7 @@ export interface HomeViewModel {
   error: string | null
   handleSearch: () => Promise<void>
   initialMovies: () => Promise<Movie[]>
+  saveMovieAsFavourite: (movie: Movie) => Promise<void>
 }
 
 export const useHomeViewModel = (): HomeViewModel => {
@@ -75,14 +80,23 @@ export const useHomeViewModel = (): HomeViewModel => {
       setLoading(false)
     }
   }
-
-  return {
-    query,
-    setQuery,
-    movies,
-    loading,
-    error,
-    handleSearch,
-    initialMovies,
+  const saveMovieAsFavourite = async (movie: Movie) => {
+  try {
+    await saveMovie(movie)
+  } catch (err) {
+    const message =
+      err instanceof Error ? err.message : 'Unable to save favourite.'
+    setError(message)
   }
+}
+  return {
+  query,
+  setQuery,
+  movies,
+  loading,
+  error,
+  handleSearch,
+  initialMovies,
+  saveMovieAsFavourite,
+}
 }
