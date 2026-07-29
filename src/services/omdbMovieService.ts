@@ -28,17 +28,22 @@ export async function searchMovies(query: string): Promise<Movie[]> {
     return []
   }
 
-  const { apiUrl, apiKey } = getOmdbConfig()
+  console.log('[OMDb debug] search query:', trimmedQuery)
 
-  const response = await fetch(
-    `${apiUrl}?apikey=${encodeURIComponent(apiKey)}&s=${encodeURIComponent(trimmedQuery)}`
-  )
+  const { apiUrl, apiKey } = getOmdbConfig()
+  const requestUrl = `${apiUrl}?apikey=${encodeURIComponent(apiKey)}&s=${encodeURIComponent(trimmedQuery)}`
+
+  console.log('[OMDb debug] request URL:', requestUrl)
+
+  const response = await fetch(requestUrl)
 
   if (!response.ok) {
     throw new Error(`OMDb request failed with status ${response.status}.`)
   }
 
   const data = (await response.json()) as OmdbSearchResponse
+
+  console.log('[OMDb debug] API response:', data)
 
   if (data.Response === 'False') {
     throw new Error(data.Error ?? 'OMDb returned an error.')
