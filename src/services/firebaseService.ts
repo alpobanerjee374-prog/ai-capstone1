@@ -1,5 +1,6 @@
 import { initializeApp, type FirebaseApp } from 'firebase/app'
-import { getFirestore, type Firestore } from 'firebase/firestore'
+import { collection, deleteDoc, doc, getDocs, getFirestore, setDoc, type Firestore } from 'firebase/firestore'
+import type { Movie } from '../types/movie'
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -13,4 +14,34 @@ const firebaseConfig = {
 const firebaseApp: FirebaseApp = initializeApp(firebaseConfig)
 const db: Firestore = getFirestore(firebaseApp)
 
+const favouritesCollection = collection(db, 'favourites')
+
+async function addFavourite(movie: Movie): Promise<void> {
+  try {
+    const documentRef = doc(db, 'favourites', movie.imdbID)
+    await setDoc(documentRef, movie)
+  } catch (error) {
+    throw new Error(`Unable to add favourite movie: ${error instanceof Error ? error.message : 'Unknown error'}`)
+  }
+}
+
+async function removeFavourite(imdbID: string): Promise<void> {
+  try {
+    const documentRef = doc(db, 'favourites', imdbID)
+    await deleteDoc(documentRef)
+  } catch (error) {
+    throw new Error(`Unable to remove favourite movie: ${error instanceof Error ? error.message : 'Unknown error'}`)
+  }
+}
+
+async function getFavourites(): Promise<Movie[]> {
+  try {
+    const snapshot = await getDocs(favouritesCollection)
+    return snapshot.docs.map((document) => document.data() as Movie)
+  } catch (error) {
+    throw new Error(`Unable to load favourite movies: ${error instanceof Error ? error.message : 'Unknown error'}`)
+  }
+}
+
 export { firebaseApp, db }
+export { addFavourite, removeFavourite, getFavourites }

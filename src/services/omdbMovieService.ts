@@ -16,6 +16,7 @@ function mapOmdbMovie(movie: NonNullable<OmdbSearchResponse['Search']>[number]):
 
   return {
     id: Number.isNaN(id) ? 0 : id,
+    imdbID: movie.imdbID,
     title: movie.Title,
     overview: undefined,
     year: movie.Year,
