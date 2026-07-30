@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import './MovieCard.css'
 import type { Movie } from '../../types/movie'
+import { FaHeart } from 'react-icons/fa'
 
 interface MovieCardProps {
   movie: Movie
@@ -22,6 +23,10 @@ const MovieCard = ({
 
   const shouldShowPoster = hasPoster && !showPosterFallback
 
+  const isRemoveButton = favouriteButtonText
+    .toLowerCase()
+    .includes('remove')
+
   return (
     <article className="movie-card">
       {shouldShowPoster ? (
@@ -39,15 +44,27 @@ const MovieCard = ({
 
       <div className="movie-card__content">
         <h3 className="movie-card__title">{movie.title}</h3>
-        <p className="movie-card__meta">Year: {movie.year ?? 'N/A'}</p>
-        <p className="movie-card__meta">Type: {movie.type ?? 'N/A'}</p>
+
+        <p className="movie-card__meta">
+          Year: {movie.year ?? 'N/A'}
+        </p>
+
+        <p className="movie-card__meta">
+          Type: {movie.type ?? 'N/A'}
+        </p>
 
         <button
-          className="movie-card__button"
+          className={`movie-card__button ${isRemoveButton
+              ? 'movie-card__button--remove'
+              : 'movie-card__button--add'
+            }`}
           type="button"
           onClick={() => onFavourite?.(movie)}
         >
-          {favouriteButtonText}
+          <FaHeart className="movie-card__heart" />
+          <span>
+            {isRemoveButton ? 'Remove Favourite' : 'Add Favourite'}
+          </span>
         </button>
       </div>
     </article>

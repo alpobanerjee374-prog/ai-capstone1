@@ -8,13 +8,13 @@
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
   align-self: stretch;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .movie-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  transform: translateY(-8px);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.18);
 }
 
 .movie-card__poster {
@@ -23,6 +23,11 @@
   object-fit: cover;
   background: #f3f4f6;
   flex-shrink: 0;
+  transition: transform 0.35s ease;
+}
+
+.movie-card:hover .movie-card__poster {
+  transform: scale(1.04);
 }
 
 .movie-card__poster--placeholder {
@@ -40,7 +45,7 @@
   flex: 1;
   flex-direction: column;
   gap: 0.4rem;
-  padding: 0.9rem;
+  padding: 0.6rem;
 }
 
 .movie-card__title {
@@ -67,18 +72,83 @@
   color: #6b7280;
 }
 
+/* ===========================
+   Favourite Button
+=========================== */
+
 .movie-card__button {
   margin-top: auto;
   width: 100%;
-  padding: 0.6rem 0.8rem;
+  height: 48px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+
   border: none;
   border-radius: 999px;
-  background: #2563eb;
-  color: white;
-  cursor: pointer;
+
+  font-size: 0.95rem;
   font-weight: 600;
+
+  cursor: pointer;
+}
+
+.movie-card__heart {
+  font-size: 16px;
+  display: flex;
+  align-items: center;
 }
 
 .movie-card__button:hover {
-  background: #1d4ed8;
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+}
+
+.movie-card__button:active {
+  transform: scale(0.96);
+}
+
+/* Add Favourite */
+
+.movie-card__button--add {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: white;
+}
+
+.movie-card__button--add:hover {
+  background: linear-gradient(135deg, #1d4ed8, #1e40af);
+}
+
+/* Remove Favourite */
+
+.movie-card__button--remove {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  animation: favouritePop 0.4s ease;
+}
+
+.movie-card__button--remove:hover {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+}
+
+/* Pop Animation */
+
+@keyframes favouritePop {
+  0% {
+    transform: scale(1);
+  }
+
+  35% {
+    transform: scale(1.18);
+  }
+
+  60% {
+    transform: scale(0.95);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
