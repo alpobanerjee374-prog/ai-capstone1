@@ -54,7 +54,7 @@ src/
 Clone the repository:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
+git clone https://https://github.com/alpobanerjee374-prog/ai-capstone1
 ```
 
 Navigate to the project folder:
@@ -109,7 +109,7 @@ Coming Soon
 
 **Alpo Banerjee**
 
-GitHub: https://github.com/YOUR_USERNAME
+GitHub: https://github.com/alpobanerjee374-prog
 
 ---
 
