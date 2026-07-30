@@ -87,16 +87,15 @@ npm run build
 
 ### Home Page
 
-> Add a screenshot here
+![Home](screenshots/home.png)
 
 ### Login Page
 
-> Add a screenshot here
+![Login](screenshots/login.png)
 
 ### Favourite Movies
 
-> Add a screenshot here
-
+![Favourites](screenshots/favourites.png)
 ---
 
 ## 🌐 Live Demo
