@@ -1,78 +1,101 @@
 import { type ReactElement } from 'react'
 import { useAuthViewModel } from './useAuthViewModel'
+import './AuthView.css'
 
 export function AuthView(): ReactElement {
-  const {
-    email,
-    setEmail,
-    password,
-    setPassword,
-    mode,
-    loading,
-    error,
-    handleSubmit,
-    toggleMode,
-  } = useAuthViewModel()
+    const {
+        email,
+        setEmail,
+        password,
+        setPassword,
+        mode,
+        loading,
+        error,
+        handleSubmit,
+        toggleMode,
+    } = useAuthViewModel()
 
-  const heading = mode === 'login' ? 'Login' : 'Create Account'
-  const toggleLabel =
-    mode === 'login' ? 'Create an account' : 'Sign in instead'
+    const heading = mode === 'login' ? 'Login' : 'Create Account'
+    const toggleLabel =
+        mode === 'login' ? 'Create an account' : 'Sign in instead'
 
-  return (
-    <section>
-      <h1>{heading}</h1>
+    return (
+        <section className="auth">
+            <div className="auth__card">
+                <h1 className="auth__title">{heading}</h1>
 
-      <form
-        onSubmit={(event) => {
-          event.preventDefault()
-          void handleSubmit()
-        }}
-      >
-        <div>
-          <label htmlFor="email">Email</label>
-          <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            autoComplete="email"
-            required
-            disabled={loading}
-          />
-        </div>
+                <form
+                    className="auth__form"
+                    onSubmit={(event) => {
+                        event.preventDefault()
+                        void handleSubmit()
+                    }}
+                >
+                    <div className="auth__field">
+                        <label className="auth__label" htmlFor="email">
+                            Email
+                        </label>
 
-        <div>
-          <label htmlFor="password">Password</label>
-          <input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            autoComplete={
-              mode === 'login' ? 'current-password' : 'new-password'
-            }
-            required
-            minLength={6}
-            disabled={loading}
-          />
-        </div>
+                        <input
+                            className="auth__input"
+                            id="email"
+                            type="email"
+                            value={email}
+                            onChange={(event) => setEmail(event.target.value)}
+                            autoComplete="email"
+                            required
+                            disabled={loading}
+                        />
+                    </div>
 
-        {error && <p role="alert">{error}</p>}
+                    <div className="auth__field">
+                        <label className="auth__label" htmlFor="password">
+                            Password
+                        </label>
 
-        <button type="submit" disabled={loading}>
-          {loading ? 'Loading...' : heading}
-        </button>
-      </form>
+                        <input
+                            className="auth__input"
+                            id="password"
+                            type="password"
+                            value={password}
+                            onChange={(event) => setPassword(event.target.value)}
+                            autoComplete={
+                                mode === 'login'
+                                    ? 'current-password'
+                                    : 'new-password'
+                            }
+                            required
+                            minLength={6}
+                            disabled={loading}
+                        />
+                    </div>
 
-      <button
-        type="button"
-        onClick={toggleMode}
-        disabled={loading}
-      >
-        {toggleLabel}
-      </button>
-    </section>
-  )
+                    {error && (
+                        <p className="auth__error" role="alert">
+                            {error}
+                        </p>
+                    )}
+
+                    <button
+                        className="auth__button"
+                        type="submit"
+                        disabled={loading}
+                    >
+                        {loading ? 'Loading...' : heading}
+                    </button>
+                </form>
+
+                <button
+                    className="auth__switch"
+                    type="button"
+                    onClick={toggleMode}
+                    disabled={loading}
+                >
+                    {toggleLabel}
+                </button>
+            </div>
+        </section>
+    )
 }
 
 export default AuthView
