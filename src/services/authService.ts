@@ -11,6 +11,7 @@ export type { User } from 'firebase/auth'
 export type AuthStateCallback = (user: User | null) => void
 
 function getReadableAuthError(error: unknown): string {
+    console.log(error)
   if (typeof error === 'object' && error !== null && 'code' in error) {
     const code = (error as { code?: string }).code
 
@@ -46,6 +47,7 @@ export async function registerUser(email: string, password: string): Promise<Use
     const userCredential = await createUserWithEmailAndPassword(auth, email, password)
     return userCredential.user
   } catch (error) {
+    console.error(error)
     throw new Error(getReadableAuthError(error))
   }
 }
