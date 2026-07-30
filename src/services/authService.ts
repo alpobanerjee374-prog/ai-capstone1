@@ -7,6 +7,7 @@ import {
 } from 'firebase/auth'
 import { auth } from './firebaseService'
 
+export type { User } from 'firebase/auth'
 export type AuthStateCallback = (user: User | null) => void
 
 function getReadableAuthError(error: unknown): string {
