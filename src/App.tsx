@@ -1,6 +1,7 @@
 import { type ReactNode } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import Header from './components/Header'
+import Footer from './components/Footer'
 import { useAuth } from './context/AuthContext'
 import { HomeProvider } from './context/HomeContext'
 import AuthView from './pages/Auth/AuthView'
@@ -63,6 +64,8 @@ function App() {
             }
           />
         </Routes>
+
+        <Footer />
       </BrowserRouter>
     </HomeProvider>
   )
