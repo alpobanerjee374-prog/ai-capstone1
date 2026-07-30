@@ -24,11 +24,31 @@ const firebaseApp: FirebaseApp = initializeApp(firebaseConfig)
 const auth: Auth = getAuth(firebaseApp)
 const db: Firestore = getFirestore(firebaseApp)
 
-const favouritesCollection = collection(db, 'favourites')
+function validateUserId(userId: string): string {
+  const trimmedUserId = userId.trim()
 
-async function addFavourite(movie: Movie): Promise<void> {
+  if (!trimmedUserId) {
+    throw new Error('A valid user ID is required to manage favourites.')
+  }
+
+  return trimmedUserId
+}
+
+function getUserFavouritesCollection(userId: string) {
+  const validUserId = validateUserId(userId)
+
+  return collection(db, 'users', validUserId, 'favourites')
+}
+
+function getFavouriteDocument(userId: string, imdbID: string) {
+  const validUserId = validateUserId(userId)
+
+  return doc(db, 'users', validUserId, 'favourites', imdbID)
+}
+
+async function addFavourite(userId: string, movie: Movie): Promise<void> {
   try {
-    const documentRef = doc(db, 'favourites', movie.imdbID)
+    const documentRef = getFavouriteDocument(userId, movie.imdbID)
 
     const movieData = Object.fromEntries(
       Object.entries(movie).filter(([, value]) => value !== undefined)
@@ -44,9 +64,13 @@ async function addFavourite(movie: Movie): Promise<void> {
   }
 }
 
-async function removeFavourite(imdbID: string): Promise<void> {
+async function removeFavourite(
+  userId: string,
+  imdbID: string
+): Promise<void> {
   try {
-    const documentRef = doc(db, 'favourites', imdbID)
+    const documentRef = getFavouriteDocument(userId, imdbID)
+
     await deleteDoc(documentRef)
   } catch (error) {
     throw new Error(
@@ -57,9 +81,11 @@ async function removeFavourite(imdbID: string): Promise<void> {
   }
 }
 
-async function getFavourites(): Promise<Movie[]> {
+async function getFavourites(userId: string): Promise<Movie[]> {
   try {
+    const favouritesCollection = getUserFavouritesCollection(userId)
     const snapshot = await getDocs(favouritesCollection)
+
     return snapshot.docs.map((document) => document.data() as Movie)
   } catch (error) {
     throw new Error(
@@ -70,5 +96,11 @@ async function getFavourites(): Promise<Movie[]> {
   }
 }
 
-export { firebaseApp, auth, db }
-export { addFavourite, removeFavourite, getFavourites }
+export {
+  firebaseApp,
+  auth,
+  db,
+  addFavourite,
+  removeFavourite,
+  getFavourites,
+}

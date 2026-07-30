@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useAuth } from '../../context/AuthContext'
 import type { Movie } from '../../types/movie'
 import {
   getMovies,
@@ -18,6 +19,7 @@ export interface HomeViewModel {
 }
 
 export const useHomeViewModel = (): HomeViewModel => {
+  const { user } = useAuth()
   const [query, setQuery] = useState('')
   const [movies, setMovies] = useState<Movie[]>([])
   const [loading, setLoading] = useState(false)
@@ -81,14 +83,18 @@ export const useHomeViewModel = (): HomeViewModel => {
     }
   }
   const saveMovieAsFavourite = async (movie: Movie) => {
-  try {
-    await saveMovie(movie)
-  } catch (err) {
-    const message =
-      err instanceof Error ? err.message : 'Unable to save favourite.'
-    setError(message)
+    try {
+      if (!user?.uid) {
+        throw new Error('Please sign in to save favourites.')
+      }
+
+      await saveMovie(user.uid, movie)
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : 'Unable to save favourite.'
+      setError(message)
+    }
   }
-}
   return {
   query,
   setQuery,

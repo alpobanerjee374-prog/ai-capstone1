@@ -70,8 +70,8 @@ export async function getMovies(query: string): Promise<Movie[]> {
   return searchMovies(cleanedQuery)
 }
 
-export async function saveMovie(movie: Movie): Promise<void> {
-  await saveFavourite(movie)
+export async function saveMovie(userId: string, movie: Movie): Promise<void> {
+  await saveFavourite(userId, movie)
 }
 
 export async function initialMovies(): Promise<Movie[]> {
